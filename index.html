@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Python Oral Test</title>
+
+    <!-- KaTeX CSS and JS for rendering Math/LaTeX -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6vOqCYziBvOwc7360c1w//G03kXDA" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+    <style>
+        /* CSS Variables for Light / Dark Mode Support */
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --card-bg: #ffffff;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --border: #e2e8f0;
+            --hard-question-bg: #fee2e2;
+            --hard-question-border: #f87171;
+            --code-bg: #f1f5f9;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --border: #334155;
+            --hard-question-bg: #451a1a;
+            --hard-question-border: #991b1b;
+            --code-bg: #334155;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        code {
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--code-bg);
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* The Well Section */
+        .well-section {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-draw {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .btn-draw:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.02);
+        }
+
+        .btn-draw:active {
+            transform: scale(0.98);
+        }
+
+        .spinner {
+            display: none;
+            margin: 1rem auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .question-display {
+            display: none;
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            text-align: left;
+            width: 100%;
+            padding: 1.5rem;
+            background-color: var(--code-bg);
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Hard Questions Section */
+        .hard-section h2 {
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hard-question-card {
+            background-color: var(--hard-question-bg);
+            border: 1px solid var(--hard-question-border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🧪 DSA Oral Test platform</h1>
+        <button class="toggle-btn" id="theme-toggle">🌗 Toggle Theme</button>
+    </header>
+
+    <main>
+        <!-- Random pool of Normal Questions -->
+        <section class="well-section">
+            <h2 style="margin-top: 0">The Question Well 🪣</h2>
+            <p>Ready for a normal question? Press the button below to draw one randomly from the pool!</p>
+            <button class="btn-draw" id="draw-btn">Draw a Question</button>
+            <div class="spinner" id="spinner"></div>
+            <div class="question-display" id="normal-display"></div>
+        </section>
+
+        <!-- Static pool of Hard Questions -->
+        <section class="hard-section">
+            <h2>🔥 Hard / Final Challenge Questions</h2>
+            <div id="hard-questions-container">
+                <!-- Hard questions rendered via JS -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // 8 Normal Questions covering the required Python topics.
+        const normalQuestions = [
+            "Write a Python function that uses a <code>while</code> loop to calculate the sum of digits of a given integer $n$ (Numeric Data). Use an <code>if</code> condition to handle negative inputs by returning an error string.<br><br><b>Input Example:</b> <code>123</code><br><b>Output Example:</b> <code>6</code><br><b>Input Example:</b> <code>-5</code><br><b>Output Example:</b> <code>'Error'</code>",
+            "Write a Python function that loops through a <code>list</code> using a <code>for</code> loop and uses an <code>if</code> condition to gather items that <strong>do not</strong> exist in a given <code>tuple</code>. Return the new filtered <code>list</code>.<br><br><b>Input Example:</b> list: <code>[1, 2, 3, 4]</code>, tuple: <code>(2, 4)</code><br><b>Output Example:</b> <code>[1, 3]</code>",
+            "Write a Python function using a <code>for</code> loop and the <code>range()</code> function to generate all prime numbers up to an integer $k$. Store them as Strings inside a <code>set</code> and return it.<br><br><b>Input Example:</b> <code>k = 10</code><br><b>Output Example:</b> <code>{'2', '3', '5', '7'}</code>",
+            "Given a <code>string</code> data input, write a Python function that iterates through it and returns a <code>dict</code> containing each unique character as keys and their frequency (Numeric Data) as values.<br><br><b>Input Example:</b> <code>'hello'</code><br><b>Output Example:</b> <code>{'h': 1, 'e': 1, 'l': 2, 'o': 1}</code>",
+            "Using a <code>while</code> loop, pop items from a given <code>list</code> of <code>string</code>s until it's empty. Inside the loop, use an <code>if</code> statement to check if the string is a palindrome. If it is, append it to a <code>tuple</code> (Hint: build a temporary list to cast into a tuple at the end).<br><br><b>Input Example:</b> <code>['apple', 'racecar', 'civic', 'dog']</code><br><b>Output Example:</b> <code>('civic', 'racecar')</code>",
+            "Assume two <code>set</code>s of Numeric Data: $A$ and $B$. Write a Python function using loops to manually compute the intersection $A \\cap B$ without using Python's built-in <code>&</code> intersection operator, and return the result as a sorted <code>list</code>.<br><br><b>Input Example:</b> A: <code>{1, 2, 3}</code>, B: <code>{2, 3, 4}</code><br><b>Output Example:</b> <code>[2, 3]</code>",
+            "Given a <code>list</code> of numeric data resembling live user inputs, write a Python script using a <code>while</code> loop to read them. Terminate early if the input is $0$. Track and return a <code>tuple</code> containing the maximum and minimum numbers encountered before termination.<br><br><b>Input Example:</b> <code>[5, 2, 9, 0, 7]</code><br><b>Output Example:</b> <code>(9, 2)</code>",
+            "Given a <code>dict</code> mapping names (String Data) to ages (Numeric Data), use a <code>for</code> loop and <code>range</code> in conjunction with an <code>if</code> statement to filter and extract all ages strictly between $18$ and $30$. Return the valid ages as a unique <code>set</code>.<br><br><b>Input Example:</b> <code>{'Alice': 25, 'Bob': 17, 'Charlie': 29, 'Dave': 25}</code><br><b>Output Example:</b> <code>{25, 29}</code>"
+        ];
+
+        // 2 Hard Questions
+        const hardQuestions = [
+            "Write a Python function that identifies anagrams in an arbitrary <code>list</code> of <code>string</code>s. Group anagrams together using a <code>dict</code> where keys are <code>tuple</code>s of sorted characters and values are <code>list</code>s of strings. Ensure no duplicate strings appear in each group by checking against a <code>set</code>.<br><br><b>Input Example:</b> <code>['eat', 'tea', 'tan', 'ate', 'nat', 'bat', 'eat']</code><br><b>Output Example:</b> <code>{('a', 'e', 't'): ['eat', 'tea', 'ate'], ('a', 'n', 't'): ['tan', 'nat'], ('a', 'b', 't'): ['bat']}</code>",
+            "Given a nested <code>list</code> of <code>tuple</code>s, containing a transactions ID (string) and a <code>dict</code> of item prices (string -> Numeric float data). Using nested <code>for</code> loops and <code>if</code> conditions, calculate the global sum of items $> 1000$. If a dictionary contains the key <code>'TAX_EXEMPT'</code>, skip its computation entirely. Return a combined global sum value.<br><br><b>Input Example:</b> <code>[('T1', {'A': 500, 'B': 1200}), ('T2', {'C': 2000, 'TAX_EXEMPT': 0}), ('T3', {'D': 1500})]</code><br><b>Output Example:</b> <code>2700</code> (from 'B' and 'D' only; 'C' is skipped due to TAX_EXEMPT)"
+        ];
+
+        // DOM Elements
+        const drawBtn = document.getElementById('draw-btn');
+        const spinner = document.getElementById('spinner');
+        const normalDisplay = document.getElementById('normal-display');
+        const hardContainer = document.getElementById('hard-questions-container');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        // Render Hard Questions on load
+        function renderHardQuestions() {
+            hardQuestions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'hard-question-card';
+                card.innerHTML = `
+                    <span class="tag">Hard Question ${index + 1}</span>
+                    <div>${q}</div>
+                `;
+                hardContainer.appendChild(card);
+            });
+            // Let KaTeX parse the newly injected DOM
+            if (typeof renderMathInElement === 'function') {
+                renderMathInElement(hardContainer, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ]
+                });
+            }
+        }
+
+        // Draw normal question interaction
+        drawBtn.addEventListener('click', () => {
+            // Hide previous question, show spinner
+            normalDisplay.style.display = 'none';
+            drawBtn.style.display = 'none';
+            spinner.style.display = 'block';
+
+            // Simulate "loading/drawing" state for 1.5s
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * normalQuestions.length);
+                const drawnQuestion = normalQuestions[randomIndex];
+
+                spinner.style.display = 'none';
+                drawBtn.style.display = 'inline-block';
+                drawBtn.innerText = 'Draw Another Question';
+                
+                normalDisplay.style.display = 'block';
+                normalDisplay.innerHTML = `<span class="tag" style="background-color: var(--primary);">Random Question</span><div>${drawnQuestion}</div>`;
+                
+                // Let KaTeX parse math in the newly drawn question
+                if (typeof renderMathInElement === 'function') {
+                    renderMathInElement(normalDisplay, {
+                        delimiters: [
+                            {left: "$$", right: "$$", display: true},
+                            {left: "$", right: "$", display: false}
+                        ]
+                    });
+                }
+            }, 800);
+        });
+
+        // Theme Toggle Support
+        function initTheme() {
+            const savedTheme = localStorage.getItem('dsa-test-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('dsa-test-theme', newTheme);
+        });
+
+        // Initialization
+        initTheme();
+        renderHardQuestions();
+
+    </script>
+</body>
+</html>
