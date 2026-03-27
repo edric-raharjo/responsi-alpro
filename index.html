@@ -188,10 +188,16 @@
 
     <header>
         <h1>🧪 DSA Oral Test platform</h1>
-        <button class="toggle-btn" id="theme-toggle">🌗 Toggle Theme</button>
+        <div style="display: flex; gap: 10px;">
+            <button class="toggle-btn" id="view-all-btn">👁️ View All Questions</button>
+            <button class="toggle-btn" id="theme-toggle">🌗 Toggle Theme</button>
+        </div>
     </header>
 
     <main>
+        <!-- All Questions View (Hidden by default) -->
+        <section id="all-questions-container" style="display: none; margin-bottom: 2rem;"></section>
+
         <!-- Random pool of Normal Questions -->
         <section class="well-section">
             <h2 style="margin-top: 0">The Question Well 🪣</h2>
@@ -235,6 +241,53 @@
         const normalDisplay = document.getElementById('normal-display');
         const hardContainer = document.getElementById('hard-questions-container');
         const themeToggle = document.getElementById('theme-toggle');
+        const viewAllBtn = document.getElementById('view-all-btn');
+        const allQuestionsContainer = document.getElementById('all-questions-container');
+
+        // View All Questions logic
+        viewAllBtn.addEventListener('click', () => {
+            if (allQuestionsContainer.style.display === 'block') {
+                allQuestionsContainer.style.display = 'none';
+                viewAllBtn.innerText = '👁️ View All Questions';
+                return;
+            }
+
+            const password = prompt("Enter password to view all questions:");
+            if (password === "alpropassword") {
+                let content = '<h2 style="border-bottom: 2px solid var(--border); padding-bottom: 0.5rem;">All Normal Questions</h2>';
+                normalQuestions.forEach((q, index) => {
+                    content += `
+                    <div class="hard-question-card" style="background-color: var(--code-bg); border-color: var(--border);">
+                        <span class="tag">Normal Question ${index + 1}</span>
+                        <div>${q}</div>
+                    </div>`;
+                });
+                
+                content += '<h2 style="border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; margin-top: 2rem;">All Hard Questions</h2>';
+                hardQuestions.forEach((q, index) => {
+                    content += `
+                    <div class="hard-question-card">
+                        <span class="tag" style="background-color: #dc2626;">Hard Question ${index + 1}</span>
+                        <div>${q}</div>
+                    </div>`;
+                });
+
+                allQuestionsContainer.innerHTML = content;
+                allQuestionsContainer.style.display = 'block';
+                viewAllBtn.innerText = '🙈 Hide All Questions';
+
+                if (typeof renderMathInElement === 'function') {
+                    renderMathInElement(allQuestionsContainer, {
+                        delimiters: [
+                            {left: "$$", right: "$$", display: true},
+                            {left: "$", right: "$", display: false}
+                        ]
+                    });
+                }
+            } else if (password !== null) {
+                alert("Incorrect password!");
+            }
+        });
 
         // Render Hard Questions on load
         function renderHardQuestions() {
